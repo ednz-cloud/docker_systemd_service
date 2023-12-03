@@ -1,10 +1,10 @@
 ---
-# meta file for deploy_adguard
+# meta file for docker_systemd_service
 galaxy_info:
   namespace: 'ednxzu'
   role_name: 'docker_systemd_service'
   author: 'Bertrand Lanson'
-  description: ''
+  description: 'Create Systemd services for docker containers.'
   license: 'license (BSD, MIT)'
   min_ansible_version: '2.10'
   platforms:
@@ -15,11 +15,11 @@ galaxy_info:
     - name: Debian
       versions:
         - bullseye
+        - bookworm
   galaxy_tags:
     - 'ubuntu'
     - 'debian'
-    - 'adguard'
-    - 'adblock'
     - 'docker'
+    - 'systemd'
 
 dependencies: []
