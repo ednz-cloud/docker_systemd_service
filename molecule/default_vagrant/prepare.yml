@@ -1,0 +1,8 @@
+---
+- name: Prepare
+  hosts: all
+  become: true
+  tasks:
+    - name: "Install docker"
+      ansible.builtin.include_role:
+        name: ednxzu.install_docker

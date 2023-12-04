@@ -1,10 +1,9 @@
 ---
 # task/main file for docker_systemd_service
-- name: Load distro-specific vars
-  include_vars: "{{ ansible_os_family }}.yml"
-  tags: always
+- name: "Import install.yml"
+  ansible.builtin.include_tasks: install.yml
+  when: docker_systemd_service_state != "absent"
 
-- include_tasks: install.yml
-  when: service_state != "absent"
-- include_tasks: uninstall.yml
-  when: service_state == "absent"
+- name: "Import uninstall.yml"
+  ansible.builtin.include_tasks: uninstall.yml
+  when: docker_systemd_service_state == "absent"

@@ -1,10 +1,9 @@
 ---
-# defaults file for docker_systemd_service
-docker_systemd_service_container_name: "{{ name }}"
-docker_systemd_service_image:
+docker_systemd_service_container_name: "nginx"
+docker_systemd_service_image: nginx
 docker_systemd_service_container_env: {}
 docker_systemd_service_container_pull_image: true
-docker_systemd_service_container_pull_force_source: true
+docker_systemd_service_container_pull_force_source: false
 docker_systemd_service_container_labels: []
 docker_systemd_service_container_cmd: []
 docker_systemd_service_container_host_network: false

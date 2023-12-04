@@ -2,54 +2,51 @@
 {% macro params(name, vals) %}
 {% for v in vals %}{{ name }} {{ v }} {% endfor %}
 {% endmacro %}
-{% set service_systemd_options_keys = service_systemd_options | selectattr("key") | map(attribute="key") | list %}
+{% set service_systemd_options_keys = docker_systemd_service_systemd_options | selectattr("key") | map(attribute="key") | list %}
 [Unit]
-{% for key, value in service_systemd_unit_options | dictsort %}
+{% for key, value in docker_systemd_service_systemd_unit_options | dictsort %}
 {{ key }}={{ value }}
 {% endfor %}
 
 [Service]
-{% for item in service_systemd_options %}
+{% for item in docker_systemd_service_systemd_options %}
 {{ item['key'] }}={{ item['value'] }}
 {% endfor %}
-{% if container_env is defined %}
+{% if docker_systemd_service_container_env is defined %}
 {% if not 'EnvironmentFile' in service_systemd_options_keys %}
-EnvironmentFile={{ sysconf_dir }}/{{ container_name }}
+EnvironmentFile={{ docker_systemd_service_sysconf_dir }}/{{ docker_systemd_service_container_name }}
 {% endif %}
 {% endif %}
 {% if not 'ExecStartPre' in service_systemd_options_keys %}
-ExecStartPre=-{{ docker_path }} rm -f {{ container_name }}
+ExecStartPre=-{{ docker_systemd_service_docker_path }} rm -f {{ docker_systemd_service_container_name }}
 {% endif %}
 {% if not 'ExecStart' in service_systemd_options_keys %}
-ExecStart={{ docker_path }} run \
-  --name {{ container_name }} \
-  --rm \
-  {% if container_env is defined %}--env-file {{ sysconf_dir }}/{{ container_name }} {% endif %}\
-  {{ params('--volume', container_volumes) }}\
-  {% if container_host_network == true %}--network host {% else %}{{ params('--publish', container_ports) }}{% endif %}\
-  {% if container_network %}--network {{ container_network }}{% endif %} \
-  {% if container_user %}--user {{ container_user }}{% endif %} \
-  {% if container_hostname %}--hostname {{ container_hostname }}{% endif %} \
-  {{ params('--link', container_links) }}\
-  {{ params('--add-host', container_hosts) }}\
-  {{ params('--label', container_labels) }}\
-  {{ params('--cap-add', container_cap_add) }}\
-  {{ params('--cap-drop', container_cap_drop) }}\
-  {{ params('--device', container_devices) }}\
-  {% if container_privileged == true %}--privileged{% endif %}\
-  {{ container_args | trim }} \
-  {{ container_image }} {% if container_cmd is string %}{{ container_cmd | trim }}{% else %}{{ container_cmd | join(' ') | trim }}{% endif %}
+{% if docker_systemd_service_container_env is defined %}ExecStart={{ docker_systemd_service_docker_path }} run --name {{ docker_systemd_service_container_name }} --rm --env-file {{ docker_systemd_service_sysconf_dir }}/{{ docker_systemd_service_container_name }} {% endif %}\
+{{ params('--volume', docker_systemd_service_container_volumes)~' \\'| trim  }}
+{% if docker_systemd_service_container_host_network == true %}--network host \{% else %}{{ params('--publish', docker_systemd_service_container_ports)~'\\'| trim }}{% endif +%}
+{% if docker_systemd_service_container_network %}--network {{ docker_systemd_service_container_network }} {% endif %}\
+{% if docker_systemd_service_container_user %}--user {{ docker_systemd_service_container_user }} {% endif %}\
+{% if docker_systemd_service_container_hostname %}--hostname {{ docker_systemd_service_container_hostname }} {% endif %}\
+{{ params('--link', docker_systemd_service_container_links)~' \\'| trim  }}
+{{ params('--add-host', docker_systemd_service_container_hosts)~' \\'| trim  }}
+{{ params('--label', docker_systemd_service_container_labels)~' \\'| trim  }}
+{{ params('--cap-add', docker_systemd_service_container_cap_add)~' \\'| trim  }}
+{{ params('--cap-drop', docker_systemd_service_container_cap_drop)~' \\'| trim }}
+{{ params('--device', docker_systemd_service_container_devices)~' \\'| trim }}
+{% if docker_systemd_service_container_privileged == true %}--privileged {% endif %}\
+{{ docker_systemd_service_container_args~' \\'| trim}}
+{{ docker_systemd_service_image }} {% if docker_systemd_service_container_cmd is string %}{{ docker_systemd_service_container_cmd | trim }}{% else %}{{ docker_systemd_service_container_cmd | join(' ') | trim }}{% endif %}
 {% endif %}
 
 {% if not 'ExecStop' in service_systemd_options_keys %}
-ExecStop={{ docker_path }} stop {{ container_name }}
+ExecStop={{ docker_systemd_service_docker_path }} stop {{ docker_systemd_service_container_name }}
 {% endif %}
 {% if container_start_post is defined %}
 ExecStartPost=-{{ container_start_post }}
 {% endif %}
 
 {% if not 'SyslogIdentifier' in service_systemd_options_keys %}
-SyslogIdentifier={{ container_name }}
+SyslogIdentifier={{ docker_systemd_service_container_name }}
 {% endif %}
 {% if not 'Restart' in service_systemd_options_keys %}
 Restart=always

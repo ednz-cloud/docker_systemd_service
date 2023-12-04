@@ -1,37 +1,36 @@
 ---
 # task/install file for docker_systemd_service
-- name: Create ENV file for {{ service_name }}.service
-  template:
-    src: "{{ template_env_path }}"
-    dest: "{{ sysconf_dir }}/{{ container_name }}"
+- name: "Create ENV file(s) for docker service(s)"
+  ansible.builtin.template:
+    src: env.j2
+    dest: "{{ docker_systemd_service_sysconf_dir }}/{{ docker_systemd_service_container_name }}"
     owner: root
     group: root
     mode: '0600'
-  when: container_env is defined
-  notify: restart container {{ container_name }}
+  notify: systemctl-restart-service
 
-- name: Pull image {{ container_image }}
-  docker_image:
-    name: '{{ container_image }}'
-    force_source: '{{ container_docker_pull_force_source | bool }}'
+- name: "Pull docker image(s)"
+  community.docker.docker_image:
+    name: "{{ docker_systemd_service_image }}"
+    force_source: "{{ docker_systemd_service_container_pull_force_source | bool }}"
     source: pull
-  when: container_docker_pull
-  notify: restart container {{ container_name }}
+  when: docker_systemd_service_container_pull_image
+  notify: systemctl-restart-service
 
-- name: Create unit {{ service_name }}.service
-  template:
-    src: "{{ template_unit_path }}"
-    dest: /etc/systemd/system/{{ service_name }}.service
+- name: "Create unit file(s) for service(s)"
+  ansible.builtin.template:
+    src: unit.j2
+    dest: "/etc/systemd/system/{{ docker_systemd_service_name }}.service"
     owner: root
     group: root
     mode: '0644'
-  notify: restart container {{ container_name }}
+  notify: systemctl-restart-service
 
-- name: Enable and start {{ container_name }}
-  systemd:
-    name: '{{ service_name }}.service'
+- name: "Enable and start service(s)"
+  ansible.builtin.systemd:
+    name: '{{ docker_systemd_service_name }}.service'
     daemon_reload: true
-    enabled: "{{ service_enabled }}"
-    masked: "{{ service_masked }}"
-    state: "{{ service_state }}"
-  register: enable_and_start
+    enabled: "{{ docker_systemd_service_enabled }}"
+    masked: "{{ docker_systemd_service_masked }}"
+    state: "{{ docker_systemd_service_state }}"
+  register: _enable_and_start

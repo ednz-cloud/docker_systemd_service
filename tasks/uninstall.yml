@@ -1,22 +1,22 @@
 ---
 # task/uninstall file for docker_systemd_service
-- name: Remove ENV file for {{ service_name }}.service
-  file:
-    path: "{{ sysconf_dir }}/{{ container_name }}"
+- name: "Remove ENV file(s) for service(s)"
+  ansible.builtin.file:
+    path: "{{ docker_systemd_service_sysconf_dir }}/{{ docker_systemd_service_container_name }}"
     state: absent
 
-- name: Disable and stop {{ container_name }}
-  systemd:
-    name: '{{ service_name }}.service'
+- name: "Disable and stop service(s)"
+  ansible.builtin.systemd:
+    name: '{{ docker_systemd_service_name }}.service'
     enabled: false
     state: stopped
 
-- name: Remove unit {{ service_name }}.service
-  file:
-    path: /etc/systemd/system/{{ service_name }}.service
+- name: "Remove unit file(s) for service(s)"
+  ansible.builtin.file:
+    path: /etc/systemd/system/{{ docker_systemd_service_name }}.service
     state: absent
 
-- name: Reload systemd units
-  systemd:
+- name: "Reload systemd units"
+  ansible.builtin.systemd:
     daemon_reload: true
   changed_when: false
