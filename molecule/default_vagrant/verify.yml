@@ -17,7 +17,6 @@
           register: slurp_etc_default_nginx
 
         - name: "Verify file /etc/systemd/system/nginx_container.service"
-          vars:
           ansible.builtin.assert:
             that:
               - stat_etc_default_nginx.stat.exists
