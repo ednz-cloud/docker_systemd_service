@@ -9,13 +9,13 @@
 {%- if item is mapping %}
 {% set key = item.keys() | first %}
 {% set value = item[key] %}
-{%- if value is string %}
---{{ key }} {{ value }} \
-{%- elif value is iterable %}
+{%- if value.__class__.__name__ == 'list' %}
 {% for val in value %}
---{{ key }} {{ val }} \{% if not loop.last +%}
+--{{ key }} "{{ val }}" \{% if not loop.last +%}
 {% endif %}{% endfor %}
-{% endif -%}
+{%- else %}
+--{{ key }} "{{ value }}" \
+{%- endif %}
 {%- elif  item is string %}
 --{{ item }} \
 {%- endif -%}

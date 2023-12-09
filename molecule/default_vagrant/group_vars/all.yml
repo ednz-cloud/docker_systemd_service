@@ -10,6 +10,9 @@ docker_systemd_service_flags:
   - volume:
       - /root:/mnt/volume
       - /var:/test:ro
+  - health-cmd: curl localhost:80
+  - health-retries: 10
+
 docker_systemd_service_container_cmd: []
 #! TO REPLACE
 docker_systemd_service_container_labels: []
