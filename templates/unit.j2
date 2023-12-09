@@ -1,26 +1,4 @@
 # {{ ansible_managed }}
-{%- macro create_docker_flags(flags) %}
-{% for item in flags %}
-{{ create_docker_flag(item) }}
-{% endfor %}
-{% endmacro -%}
-
-{%- macro create_docker_flag(item) %}
-{%- if item is mapping %}
-{% set key = item.keys() | first %}
-{% set value = item[key] %}
-{%- if value.__class__.__name__ == 'list' %}
-{% for val in value %}
---{{ key }} "{{ val }}" \{% if not loop.last +%}
-{% endif %}{% endfor %}
-{%- else %}
---{{ key }} "{{ value }}" \
-{%- endif %}
-{%- elif  item is string %}
---{{ item }} \
-{%- endif -%}
-{% endmacro %}
-
 {% set service_systemd_options_keys = docker_systemd_service_systemd_options | selectattr("key") | map(attribute="key") | list %}
 [Unit]
 {% for key, value in docker_systemd_service_systemd_unit_options | dictsort %}
@@ -41,8 +19,8 @@ ExecStartPre=-{{ docker_systemd_service_docker_path }} rm -f {{ docker_systemd_s
 ExecStart={{ docker_systemd_service_docker_path }} run --name {{ docker_systemd_service_container_name }} \
 --rm \
 --env-file {{ docker_systemd_service_sysconf_dir }}/{{ docker_systemd_service_container_name }} \
-{{ create_docker_flags(docker_systemd_service_flags) -}}
-{{- docker_systemd_service_image -}}{{ ' ' if docker_systemd_service_container_cmd else '' }}{% if docker_systemd_service_container_cmd is string %}{{ docker_systemd_service_container_cmd | trim }}{% else %}{{ docker_systemd_service_container_cmd | join(' ') | trim }}{% endif %}
+{{ docker_systemd_service_flags|create_docker_flags }}
+{{ docker_systemd_service_image -}}{{ ' ' if docker_systemd_service_container_cmd else '' }}{% if docker_systemd_service_container_cmd is string %}{{ docker_systemd_service_container_cmd | trim }}{% else %}{{ docker_systemd_service_container_cmd | join(' ') | trim }}{% endif %}
 {% endif +%}
 {% if not 'ExecStop' in service_systemd_options_keys %}
 ExecStop={{ docker_systemd_service_docker_path }} stop {{ docker_systemd_service_container_name }}
