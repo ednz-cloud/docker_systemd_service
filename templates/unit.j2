@@ -6,15 +6,19 @@
 {% endmacro -%}
 
 {%- macro create_docker_flag(item) %}
+{%- if item is mapping %}
 {% set key = item.keys() | first %}
 {% set value = item[key] %}
 {%- if value is string %}
 --{{ key }} {{ value }} \
-{%- elif value is iterable and value is not string %}
+{%- elif value is iterable %}
 {% for val in value %}
 --{{ key }} {{ val }} \{% if not loop.last +%}
 {% endif %}{% endfor %}
 {% endif -%}
+{%- elif  item is string %}
+--{{ item }} \
+{%- endif -%}
 {% endmacro %}
 
 {% set service_systemd_options_keys = docker_systemd_service_systemd_options | selectattr("key") | map(attribute="key") | list %}

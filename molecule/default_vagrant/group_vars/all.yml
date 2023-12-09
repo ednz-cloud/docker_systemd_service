@@ -5,6 +5,7 @@ docker_systemd_service_container_env: {}
 docker_systemd_service_container_pull_image: true
 docker_systemd_service_container_pull_force_source: false
 docker_systemd_service_flags:
+  - privileged
   - network: host
   - volume:
       - /root:/mnt/volume
