@@ -2,7 +2,7 @@ docker_systemd_service
 =========
 > This repository is only a mirror. Development and testing is done on a private gitea server.
 
-This role lets you configure a docker container and run it as a systemd service on **debian-based** distributions.
+This role lets you configure a docker container and run it as a systemd service on **debian-based** distributions. This role is heavily sourced from [mhutter.docker-systemd-service](https://github.com/mhutter/ansible-docker-systemd-service), but aims at providing some of the missing features of said role.
 
 Requirements
 ------------
