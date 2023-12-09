@@ -39,79 +39,28 @@ docker_systemd_service_container_pull_force_source: true # by default, set to tr
 If `docker_systemd_service_container_pull_image: true`, whether the pull you be executed at every run. See [`docker_image.force_source`](https://docs.ansible.com/ansible/latest/collections/community/docker/docker_image_module.html#parameter-force_source)
 
 ```yaml
-docker_systemd_service_container_labels: [] # by default, set to []
+docker_systemd_service_flags: [] # by default, set to []
 ```
-A list of labels to add to the container. These should be strings of the form `some.label=value`.
-
-```yaml
-docker_systemd_service_container_cmd: [] # by default, set to []
-```
-A list of container run command to apply.
-
-```yaml
-docker_systemd_service_container_host_network: false  # by default, set to false
-```
-Whether the container should use the `network_mode: host`.
-
-```yaml
-docker_systemd_service_container_network: ""  # by default, set to ""
-```
-If `docker_systemd_service_container_host_network: false`, you can define the network to use for the container.
-
-```yaml
-docker_systemd_service_container_user: ""  # by default, set to ""
-```
-Define a user to use within the container. See [user settings](https://docs.docker.com/engine/reference/run/#user)
-
-```yaml
-docker_systemd_service_container_hostname: ""  # by default, set to ""
-```
-The hostname to apply to the container.
-
-```yaml
-docker_systemd_service_container_links: []  # by default, set to []
-```
-A list of `--links` arguments.
-
-```yaml
-docker_systemd_service_container_ports: []  # by default, set to []
-```
-A list of ports to expose. Example: `<host_port>:<container_port>`
-
-```yaml
-docker_systemd_service_container_hosts: []  # by default, set to []
-```
-A list of `--add-host` arguments.
-
-```yaml
-docker_systemd_service_container_volumes: []  # by default, set to []
-```
-A list of volumes and their mount points. Example: `/path/on/host:/path/in/container`
-
-```yaml
-docker_systemd_service_container_cap_add: []  # by default, set to []
-```
-A list of capabilities to add to the container. Example: `SYS_ADMIN`.
-
-```yaml
-docker_systemd_service_container_cap_drop: []  # by default, set to []
-```
-A list of capabilities to remove from the container.
-
-```yaml
-docker_systemd_service_container_devices: []  # by default, set to []
-```
-A list of devices to add to the container.
-
-```yaml
-docker_systemd_service_container_privileged: false  # by default, set to false
-```
-Whether to run the container in privileged mode. See [runtime privilege](https://docs.docker.com/engine/reference/run/#runtime-privilege-and-linux-capabilities)
-
-```yaml
-docker_systemd_service_container_args: ""  # by default, set to ""
-```
-Arbitrary list of arguments to the `docker run` command as a string.
+This variable lets you pass whatever flags you need to the docker run command. It is a list, to which you can add multiple types of flags:
+ - ```yaml
+    - key: value
+    # will pass the flag --key "value" to the container.
+    Example:
+      - network: host
+ - ```yaml
+    - simple_key
+    # will pass the flag --simple_key to the container.
+    Example:
+      - privileged
+ - ```yaml
+    - key:
+        - value1
+        - value2
+    # will pass the flags --key "value1" --key "value2" to the container.
+    Example:
+      - volume:
+          - /path/on/host:/path/on/container
+          - /var/run/docker.sock:/var/run/docker.sock:ro
 
 ```yaml
 docker_systemd_service_name: "{{ docker_systemd_service_container_name }}_container"  # by default, set to "{{ docker_systemd_service_container_name }}_container"
