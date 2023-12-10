@@ -16,7 +16,10 @@
             src: "/etc/default/nginx"
           register: slurp_etc_default_nginx
 
-        - name: "Verify file /etc/systemd/system/nginx_container.service"
+        - name: "Verify file /etc/default/nginx"
+          vars:
+            nginx_expected_env_file: |
+              TEST_ENV=test
           ansible.builtin.assert:
             that:
               - stat_etc_default_nginx.stat.exists
@@ -24,7 +27,7 @@
               - stat_etc_default_nginx.stat.pw_name == 'root'
               - stat_etc_default_nginx.stat.gr_name == 'root'
               - stat_etc_default_nginx.stat.mode == '0600'
-              - (slurp_etc_default_nginx.content|b64decode) == ''
+              - (slurp_etc_default_nginx.content|b64decode) == nginx_expected_env_file
 
     - name: "Test: service nginx_container"
       block:
@@ -56,6 +59,9 @@
               ExecStart=/usr/bin/docker run --name nginx \
               --rm \
               --env-file /etc/default/nginx \
+              --privileged \
+              --network "host" \
+              --cap-add "NET_ADMIN" \
               nginx
               ExecStop=/usr/bin/docker stop nginx
               SyslogIdentifier=nginx
