@@ -53,20 +53,9 @@
               [Service]
               EnvironmentFile=/etc/default/nginx
               ExecStartPre=-/usr/bin/docker rm -f nginx
-              ExecStart=/usr/bin/docker run --name nginx --rm --env-file /etc/default/nginx \
-              \
-              \
-              \
-              \
-              \
-              \
-              \
-              \
-              \
-              \
-              \
-              \
-              \
+              ExecStart=/usr/bin/docker run --name nginx \
+              --rm \
+              --env-file /etc/default/nginx \
               nginx
               ExecStop=/usr/bin/docker stop nginx
               SyslogIdentifier=nginx

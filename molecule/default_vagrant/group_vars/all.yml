@@ -1,35 +1,11 @@
 ---
-docker_systemd_service_container_name: "ninx"
+docker_systemd_service_container_name: "nginx"
 docker_systemd_service_image: nginx
 docker_systemd_service_container_env: {}
 docker_systemd_service_container_pull_image: true
-docker_systemd_service_container_pull_force_source: false
-docker_systemd_service_flags:
-  - health-cmd: curl localhost:80
-  - health-retries: 10
-  - privileged
-  - network: host
-  - volume:
-      - /root:/mnt/volume
-      - /var:/test:ro
-
+docker_systemd_service_container_pull_force_source: true
+docker_systemd_service_flags: []
 docker_systemd_service_container_cmd: []
-#! TO REPLACE
-docker_systemd_service_container_labels: []
-docker_systemd_service_container_host_network: false
-docker_systemd_service_container_network: ""
-docker_systemd_service_container_user: ""
-docker_systemd_service_container_hostname: ""
-docker_systemd_service_container_links: []
-docker_systemd_service_container_ports: []
-docker_systemd_service_container_hosts: []
-docker_systemd_service_container_volumes: []
-docker_systemd_service_container_cap_add: []
-docker_systemd_service_container_cap_drop: []
-docker_systemd_service_container_devices: []
-docker_systemd_service_container_privileged: false
-docker_systemd_service_container_args: ""
-#! END TO REPLACE
 docker_systemd_service_name: "{{ docker_systemd_service_container_name }}_container"
 docker_systemd_service_systemd_options: []
 docker_systemd_service_enabled: true

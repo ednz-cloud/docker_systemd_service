@@ -2,7 +2,9 @@
 
 
 def create_docker_flags(flags):
-    return "\n".join([create_docker_flag(item) for item in flags])
+    if flags:
+        return "\n".join([create_docker_flag(item) for item in flags])
+    return None
 
 
 def create_docker_flag(item):
