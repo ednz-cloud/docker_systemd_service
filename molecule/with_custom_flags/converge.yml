@@ -3,6 +3,6 @@
   hosts: all
   become: true
   tasks:
-    - name: "Include ednxzu.docker_systemd_service"
+    - name: "Include ednz_cloud.docker_systemd_service"
       ansible.builtin.include_role:
-        name: "ednxzu.docker_systemd_service"
+        name: "ednz_cloud.docker_systemd_service"

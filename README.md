@@ -7,7 +7,7 @@ This role lets you configure a docker container and run it as a systemd service 
 Requirements
 ------------
 
-This roles assumes you have docker installed on the target host. You can use [ednxzu.install_docker](https://github.com/ednxzu/install_docker) to do so.
+This roles assumes you have docker installed on the target host. You can use [ednz_cloud.install_docker](https://github.com/ednz_cloud/install_docker) to do so.
 
 Role Variables
 --------------
@@ -104,7 +104,7 @@ Example Playbook
 # calling the role inside a playbook with either the default or group_vars/host_vars
 - hosts: servers
   roles:
-    - ednxzu.docker_systemd_service
+    - ednz_cloud.docker_systemd_service
 ```
 
 License
