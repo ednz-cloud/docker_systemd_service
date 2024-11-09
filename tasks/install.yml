@@ -24,7 +24,7 @@
     owner: root
     group: root
     mode: '0644'
-  registr: _docker_systemd_service_unit_file
+  register: _docker_systemd_service_unit_file
 
 - name: "Docker systemd service | Set reload-check & restart-check variable"
   ansible.builtin.set_fact:
