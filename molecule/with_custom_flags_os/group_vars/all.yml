@@ -1,10 +1,10 @@
 ---
 docker_systemd_service_container_name: "nginx"
-docker_systemd_service_image: nginx
+docker_systemd_service_image: nginx:1.27
 docker_systemd_service_container_env:
   TEST_ENV: test
 docker_systemd_service_container_pull_image: true
-docker_systemd_service_container_pull_force_source: true
+docker_systemd_service_container_pull_force_source: false
 docker_systemd_service_flags:
   - privileged
   - network: host
