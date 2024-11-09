@@ -1,3 +1,9 @@
+## v0.2.0 (2024-11-09)
+
+### Feat
+
+- enable customization of unit options in systemd file
+
 ## v0.1.0 (2024-11-09)
 
 ### Feat
