@@ -9,7 +9,5 @@ docker_systemd_service_flags: []
 docker_systemd_service_container_cmd: []
 docker_systemd_service_name: "{{ docker_systemd_service_container_name }}_container"
 docker_systemd_service_systemd_options: []
-docker_systemd_service_enabled: true
-docker_systemd_service_masked: false
-docker_systemd_service_state: started
-docker_systemd_service_restart: true
+
+docker_systemd_service_start: true

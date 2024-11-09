@@ -1,9 +1,37 @@
 ---
 # task/main file for docker_systemd_service
-- name: "Import install.yml"
-  ansible.builtin.include_tasks: install.yml
-  when: docker_systemd_service_state != "absent"
+- name: "Docker systemd service | Set reload-check & restart-check variable"
+  ansible.builtin.set_fact:
+    _docker_systemd_service_need_daemon_reload: false
+    _docker_systemd_service_need_restart: false
 
-- name: "Import uninstall.yml"
-  ansible.builtin.include_tasks: uninstall.yml
-  when: docker_systemd_service_state == "absent"
+- name: "Docker systemd service | Import configure.yml"
+  ansible.builtin.include_tasks: configure.yml
+
+- name: "Docker systemd service | Populate service facts"
+  ansible.builtin.service_facts:
+
+- name: "Docker systemd service | Set restart-check variable"
+  ansible.builtin.set_fact:
+    _docker_systemd_service_need_restart: true
+  when:
+    - ansible_facts.services[docker_systemd_service_name~'.service'].state != 'running'
+
+- name: "Docker systemd service | Enable service: {{ docker_systemd_service_name }}"
+  ansible.builtin.service:
+    name: "{{ docker_systemd_service_name }}"
+    enabled: true
+
+- name: "Docker systemd service | Reload systemd daemon"
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: _docker_systemd_service_need_daemon_reload
+
+- name: "Docker systemd service | Start service: {{ docker_systemd_service_name }}"
+  ansible.builtin.service:
+    name: "{{ docker_systemd_service_name }}"
+    state: restarted
+  throttle: 1
+  when:
+    - _docker_systemd_service_need_restart
+    - docker_systemd_service_start
