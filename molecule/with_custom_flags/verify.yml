@@ -62,7 +62,7 @@
               --privileged \
               --network "host" \
               --cap-add "NET_ADMIN" \
-              nginx
+              nginx:1.27
               ExecStop=/usr/bin/docker stop nginx
               SyslogIdentifier=nginx
               Restart=always
