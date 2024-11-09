@@ -33,13 +33,4 @@
     _docker_systemd_service_need_restart: true
   when: _docker_systemd_service_env_file.changed or
         _docker_systemd_service_unit_file.changed or
-        docker_systemd_service_container_pull_image.changed
-
-- name: "Docker systemd service | Enable and start service(s)"
-  ansible.builtin.systemd:
-    name: '{{ docker_systemd_service_name }}.service'
-    daemon_reload: true
-    enabled: "{{ docker_systemd_service_enabled }}"
-    masked: "{{ docker_systemd_service_masked }}"
-    state: "{{ docker_systemd_service_state }}"
-  register: _enable_and_start
+        _docker_systemd_service_image_pull.changed

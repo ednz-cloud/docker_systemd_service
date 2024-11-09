@@ -24,7 +24,7 @@
               - stat_etc_default_nginx.stat.pw_name == 'root'
               - stat_etc_default_nginx.stat.gr_name == 'root'
               - stat_etc_default_nginx.stat.mode == '0600'
-              - (slurp_etc_default_nginx.content|b64decode) == ''
+              - (slurp_etc_default_nginx.content|b64decode) == '\n'
 
     - name: "Test: service nginx_container"
       block:
